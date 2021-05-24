@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "steeluser",
+    "password": "leets123",
+    "database": "steeldb",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "steeluser",
+    "password": "leets123",
+    "database": "steeldb",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "steeluser",
+    "password": "leets123",
+    "database": "steeldb",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}
