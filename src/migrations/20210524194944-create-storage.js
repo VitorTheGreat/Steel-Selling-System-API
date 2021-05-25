@@ -13,6 +13,9 @@ module.exports = {
         unique: true,
         allowNull: false
       },
+      local: {
+        type: Sequelize.STRING(50)
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

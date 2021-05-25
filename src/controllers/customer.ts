@@ -3,57 +3,60 @@ import logging from "../config/logging";
 import Validator from "fastest-validator";
 const models = require("../models");
 
-const NAMESPACE = "SUPPLIER CONTROLLER";
+const NAMESPACE = "CUSTOMER CONTROLLER";
 
 const validateFields = (fields: object) => {
     const v = new Validator();
 
     const schema = {
-        registered_name: { type: "string", nullable: false },
+        name: { type: "string", nullable: false },
         email: { type: "string", optional: true, nullable: true },
-        cnpj: { type: "string", nullable: false },
-        ie: { type: "string", nullable: false },
+        document: { type: "string", nullable: false },
+        rg: { type: "string", nullable: false },
         contact: { type: "string", nullable: false },
-        address: { type: "string", nullable: false },
-        neighborhood: { type: "string", nullable: false },
+        secondary_contact: { type: "string", nullable: false },
+        postal_code: { type: "string", nullable: false },
         city: { type: "string", nullable: false },
-        postal_code: { type: "string", optional: true, nullable: true },
-        fk_state_id: { type: "number", optional: true, nullable: true, integer: true }
+        neighborhood: { type: "string", optional: true, nullable: true },
+        address: { type: "string", optional: true, nullable: true },
+        fk_state_id: { type: "number", optional: true, nullable: true, integer: true },
     };
 
     return v.validate(fields, schema);
 };
 
 const create = (req: Request, res: Response, next: NextFunction) => {
-    logging.info(NAMESPACE, "Creating Supplier");
+    logging.info(NAMESPACE, "Creating Product");
 
     let {
-        registered_name,
+        name,
         email,
-        cnpj,
-        ie,
+        document,
+        rg,
         contact,
-        address,
-        neighborhood,
-        city,
+        secondary_contact,
         postal_code,
+        city,
+        neighborhood,
+        address,
         fk_state_id,
     } = req.body;
 
-    let supplier = {
-        registered_name,
+    let customer = {
+        name,
         email,
-        cnpj,
-        ie,
+        document,
+        rg,
         contact,
-        address,
-        neighborhood,
-        city,
+        secondary_contact,
         postal_code,
+        city,
+        neighborhood,
+        address,
         fk_state_id,
     };
 
-    const validationResponse = validateFields(supplier);
+    const validationResponse = validateFields(customer);
 
     if (validationResponse !== true) {
         //? The validator is not totally boolean, when not passed it returns a json about the error
@@ -64,10 +67,10 @@ const create = (req: Request, res: Response, next: NextFunction) => {
         });
     }
 
-    models.Supplier.create(supplier)
+    models.Customer.create(customer)
         .then((result: any) =>
             res.status(201).json({
-                message: "Supplier Created successfully",
+                message: "Customer Created successfully",
                 post: result,
             })
         )
@@ -75,36 +78,21 @@ const create = (req: Request, res: Response, next: NextFunction) => {
             logging.error(NAMESPACE, err.message, err);
 
             return res.status(500).json({
-                message: "ERROR: Supplier not Created",
-                error: err,
-            });
-        });
-};
-
-const getAll = (req: Request, res: Response, next: NextFunction) => {
-    logging.info(NAMESPACE, `Getting All Supplier`);
-
-    models.Supplier.findAll()
-        .then((results: any) => res.status(200).json({ results }))
-        .catch((err: any) => {
-            logging.error(NAMESPACE, err.message, err);
-
-            return res.status(500).json({
-                message: "ERROR",
+                message: "ERROR: Customer not Created",
                 error: err,
             });
         });
 };
 
 const getById = (req: Request, res: Response, next: NextFunction) => {
-    logging.info(NAMESPACE, `Getting Product by Id`);
+    logging.info(NAMESPACE, `Getting Customer by Id`);
 
     const id = req.params.id;
 
-    models.Supplier.findByPk(id)
+    models.Customer.findByPk(id)
         .then((result: any) => {
             if (!result) {
-                res.status(404).json({ message: "Product not found" });
+                res.status(404).json({ message: "Customer not found" });
             }
             res.status(200).json(result);
         })
@@ -118,34 +106,51 @@ const getById = (req: Request, res: Response, next: NextFunction) => {
         });
 };
 
+const getAll = (req: Request, res: Response, next: NextFunction) => {
+    logging.info(NAMESPACE, `Getting All Customers`);
+
+    models.Customer.findAll()
+        .then((results: any) => res.status(200).json({ results }))
+        .catch((err: any) => {
+            logging.error(NAMESPACE, err.message, err);
+
+            return res.status(500).json({
+                message: "ERROR",
+                error: err,
+            });
+        });
+};
+
 const update = (req: Request, res: Response, next: NextFunction) => {
-    logging.info(NAMESPACE, `Updating a Supplier`);
+    logging.info(NAMESPACE, `Updating a Customer`);
 
     const id = req.params.id;
 
     let {
-        registered_name,
+        name,
         email,
-        cnpj,
-        ie,
+        document,
+        rg,
         contact,
-        address,
-        neighborhood,
-        city,
+        secondary_contact,
         postal_code,
+        city,
+        neighborhood,
+        address,
         fk_state_id,
     } = req.body;
 
     let updatedInfo = {
-        registered_name,
+        name,
         email,
-        cnpj,
-        ie,
+        document,
+        rg,
         contact,
-        address,
-        neighborhood,
-        city,
+        secondary_contact,
         postal_code,
+        city,
+        neighborhood,
+        address,
         fk_state_id,
     };
 
@@ -160,34 +165,33 @@ const update = (req: Request, res: Response, next: NextFunction) => {
         });
     }
 
-    models.Supplier.update(updatedInfo, { where: { id } })
+    models.Customer.update(updatedInfo, { where: { id } })
         .then((result: any) => res.status(200).json({ result })) //? the result here, returns a boolean value!
         .catch((err: any) => {
             logging.error(NAMESPACE, err.message, err);
 
             return res.status(500).json({
-                message: "ERROR: Product not updated",
+                message: "ERROR: Customer not updated",
                 error: err,
             });
         });
 };
 
 const destroy = (req: Request, res: Response, next: NextFunction) => {
-    logging.info(NAMESPACE, `Deleting a Supplier`);
+    logging.info(NAMESPACE, `Deleting a Customer`);
 
     const id = req.params.id;
 
-    models.Supplier.destroy({ where: { id } })
+    models.Customer.destroy({ where: { id } })
         .then((result: any) => res.status(200).json({ result })) //? the result here, returns a boolean value!
         .catch((err: any) => {
             logging.error(NAMESPACE, err.message, err);
 
             return res.status(500).json({
-                message: "ERROR: Supplier not deleted",
+                message: "ERROR: Customer not deleted",
                 error: err,
             });
         });
 };
-
 
 export default { getAll, create, getById, update, destroy };

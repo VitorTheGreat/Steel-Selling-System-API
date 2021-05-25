@@ -19,6 +19,9 @@ module.exports = (sequelize, DataTypes) => {
       unique: true,
       allowNull: false
     },
+    local: {
+      type: DataTypes.STRING(50)
+    }
   }, {
     sequelize,
     modelName: 'Storage',

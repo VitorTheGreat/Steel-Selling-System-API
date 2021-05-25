@@ -13,8 +13,22 @@ const validateFields = (fields: object) => {
   const v = new Validator();
 
   const schema = {
-    name: { type: "string", max: "30", optional: true, nullable: true },
-    email: { type: "string", max: "30", optional: false, nullable: false },
+    name: { type: "string", optional: true, nullable: true },
+    email: { type: "string", optional: false, nullable: false },
+    email_verified: { type: "boolean", optional: true, nullable: true },
+    password: { type: "string", optional: false, nullable: false },
+    fk_role_id: { type: "number", optional: false, nullable: false, integer: true },
+    fk_storage_id: { type: "number", optional: false, nullable: false, integer: true }
+  };
+
+  return v.validate(fields, schema);
+};
+
+const validateLoginFields = (fields: object) => {
+  const v = new Validator();
+
+  const schema = {
+    email: { type: "string", optional: false, nullable: false },
     password: { type: "string", optional: false, nullable: false },
   };
 
@@ -49,7 +63,10 @@ const singUp = (req: Request, res: Response, next: NextFunction) => {
       const user = {
         name: req.body.name,
         email: req.body.email,
+        email_verified: false,
         password: hash,
+        fk_role_id: req.body.fk_role_id,
+        fk_storage_id: req.body.fk_storage_id
       };
 
       const validationResponse = validateFields(user);
@@ -90,7 +107,7 @@ const loginUser = (req: Request, res: Response, next: NextFunction) => {
     password: req.body.password,
   };
 
-  const validationResponse = validateFields(user);
+  const validationResponse = validateLoginFields(user);
 
   if (validationResponse !== true) {
     //? The validator is not totally boolean, when not passed it returns a json about the error
@@ -105,34 +122,34 @@ const loginUser = (req: Request, res: Response, next: NextFunction) => {
     .then((user: any) => {
       user === null
         ? res.status(401).json({
-            message: "Email not registered",
-          })
+          message: "Email not registered",
+        })
         : bcryptjs.compare(
-            req.body.password,
-            user.password,
-            (err: any, result: any) => {
-              if (result) {
-                const token = jwt.sign(
-                  {
-                    email: user.email,
-                    userId: user.id,
-                  },
-                  config.jwtoken.key,
-                  { expiresIn: '23h' },
-                  (err: any, token: any) => {
-                    res.status(200).json({
-                      message: "Authentication successful!",
-                      token,
-                    });
-                  }
-                );
-              } else {
-                res.status(401).json({
-                  message: "Invalid Credentials",
-                });
-              }
+          req.body.password,
+          user.password,
+          (err: any, result: any) => {
+            if (result) {
+              const token = jwt.sign(
+                {
+                  email: user.email,
+                  userId: user.id,
+                },
+                config.jwtoken.key,
+                { expiresIn: '16h' },
+                (err: any, token: any) => {
+                  res.status(200).json({
+                    message: "Authentication successful!",
+                    token,
+                  });
+                }
+              );
+            } else {
+              res.status(401).json({
+                message: "Invalid Credentials",
+              });
             }
-          );
+          }
+        );
     })
     .catch((err: any) => {
       logging.error(NAMESPACE, err.message, err);

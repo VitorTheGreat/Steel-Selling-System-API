@@ -11,6 +11,7 @@ import authMiddleware from "./middleware/check-auth";
 import productRoutes from "./routes/product";
 import userRoutes from "./routes/user";
 import supplierRoutes from './routes/supplier'
+import customerRoutes from './routes/customer'
 
 const NAMESPACE = "SERVER";
 const router = express();
@@ -55,8 +56,9 @@ router.use((req, res, next) => {
 //Routes
 // I chose to use it with all routes here to protect everything
 // router.use("/api/books", authMiddleware.checkAuth, productRoutes);
-router.use("/api/supplier", supplierRoutes);
+router.use("/api/suppliers", supplierRoutes);
 router.use("/api/products", productRoutes);
+router.use("/api/customers", customerRoutes);
 router.use("/api/user", userRoutes);
 
 // Error Handling

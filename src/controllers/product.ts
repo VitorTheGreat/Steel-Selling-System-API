@@ -91,7 +91,7 @@ const create = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const getById = (req: Request, res: Response, next: NextFunction) => {
-  logging.info(NAMESPACE, `Getting by Id`);
+  logging.info(NAMESPACE, `Getting Product by Id`);
 
   const id = req.params.id;
 
@@ -132,11 +132,36 @@ const update = (req: Request, res: Response, next: NextFunction) => {
 
   const id = req.params.id;
 
-  let { author, title } = req.body;
+  let {
+    name,
+    ean,
+    fractioned_qty,
+    unit_price,
+    buy_price,
+    cost_price,
+    selling_price,
+    profit,
+    ipi,
+    icms,
+    ncm,
+    csosn,
+    fk_supplier_id
+  } = req.body;
 
-  const updatedInfo = {
-    author,
-    title,
+  let updatedInfo = {
+    name,
+    ean,
+    fractioned_qty,
+    unit_price,
+    buy_price,
+    cost_price,
+    selling_price,
+    profit,
+    ipi,
+    icms,
+    ncm,
+    csosn,
+    fk_supplier_id
   };
 
   const validationResponse = validateFields(updatedInfo);
