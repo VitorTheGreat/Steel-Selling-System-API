@@ -26,21 +26,21 @@ module.exports = {
       fk_product_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: "products",
+          model: "Products",
           key: "id"
         }
       },
       fk_storage_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: "storages",
+          model: "Storages",
           key: "id"
         }
       },
       fk_selling_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: "sellings",
+          model: "Sellings",
           key: "id"
         }
       },

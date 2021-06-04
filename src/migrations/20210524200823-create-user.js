@@ -27,7 +27,7 @@ module.exports = {
       fk_role_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'roles',
+          model: 'Roles',
           key: 'id'
         },
         allowNull: false
@@ -35,7 +35,7 @@ module.exports = {
       fk_storage_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'storages',
+          model: 'Storages',
           key: 'id'
         },
         allowNull: false

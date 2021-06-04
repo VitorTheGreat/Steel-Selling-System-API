@@ -35,14 +35,14 @@ module.exports = {
       fk_user_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: "users",
+          model: "Users",
           key: "id"
         }
       },
       fk_customer_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: "customers",
+          model: "Customers",
           key: "id"
         }
       },

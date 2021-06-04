@@ -53,7 +53,7 @@ module.exports = {
       fk_supplier_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: "suppliers",
+          model: "Suppliers",
           key: 'id'
         }
       },
